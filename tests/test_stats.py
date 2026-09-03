@@ -86,3 +86,15 @@ def test_overview_totals():
     assert result["total_authors"] == 2
     assert result["total_insertions"] == 7
     assert result["total_deletions"] == 1
+
+
+def test_overview_accepts_a_precomputed_author_summary():
+    commits = [make_commit("1", "Alice", "2024-01-01T09:00:00+00:00", [FileChange("a.txt", 5, 1)])]
+    authors = author_summary(commits)
+    assert overview(commits, authors) == overview(commits)
+
+
+def test_dates_with_zulu_suffix_are_supported():
+    commits = [make_commit("1", "Alice", "2024-01-01T09:00:00Z")]
+    assert activity_by_weekday(commits)["Mon"] == 1
+    assert activity_by_hour(commits)[9] == 1
