@@ -1,6 +1,12 @@
 import json
 
-from gitpulse.render import render_bar_chart, render_json, render_markdown, render_table
+from gitpulse.render import (
+    render_bar_chart,
+    render_csv,
+    render_json,
+    render_markdown,
+    render_table,
+)
 
 OVERVIEW = {
     "total_commits": 2,
@@ -42,3 +48,16 @@ def test_render_bar_chart_scales_to_width():
 
 def test_render_bar_chart_empty():
     assert render_bar_chart({}) == ""
+
+
+def test_render_csv_has_header_and_author_row():
+    output = render_csv(OVERVIEW, AUTHORS)
+    lines = output.split("\r\n")
+    assert lines[0] == "author,commits,insertions,deletions,files_touched"
+    assert lines[1] == "Alice,2,10,2,1"
+
+
+def test_render_csv_includes_totals_footer():
+    output = render_csv(OVERVIEW, AUTHORS)
+    assert "total_commits,2" in output
+    assert "longest_streak_days,2" in output

@@ -17,6 +17,12 @@ def test_run_json_format(sample_repo):
     assert parsed["overview"]["total_commits"] == 3
 
 
+def test_run_csv_format(sample_repo):
+    args = build_parser().parse_args([str(sample_repo), "--format", "csv"])
+    output = run(args)
+    assert output.startswith("author,commits,insertions,deletions,files_touched")
+
+
 def test_main_returns_error_code_for_non_repo(tmp_path, capsys):
     exit_code = main([str(tmp_path)])
     assert exit_code == 1

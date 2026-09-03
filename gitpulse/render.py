@@ -1,3 +1,5 @@
+import csv
+import io
 import json
 
 
@@ -54,6 +56,23 @@ def render_markdown(overview: dict, authors: dict) -> str:
         row = f"| {author} | {data['commits']} | {data['insertions']} | {data['deletions']} |"
         lines.append(row)
     return "\n".join(lines)
+
+
+def render_csv(overview: dict, authors: dict) -> str:
+    buffer = io.StringIO()
+    writer = csv.writer(buffer)
+    writer.writerow(["author", "commits", "insertions", "deletions", "files_touched"])
+    for author, data in sorted(authors.items(), key=lambda kv: kv[1]["commits"], reverse=True):
+        writer.writerow(
+            [author, data["commits"], data["insertions"], data["deletions"], len(data["files"])]
+        )
+    writer.writerow([])
+    writer.writerow(["total_commits", overview["total_commits"]])
+    writer.writerow(["total_authors", overview["total_authors"]])
+    writer.writerow(["total_insertions", overview["total_insertions"]])
+    writer.writerow(["total_deletions", overview["total_deletions"]])
+    writer.writerow(["longest_streak_days", overview["longest_streak_days"]])
+    return buffer.getvalue().strip("\n")
 
 
 def render_json(overview: dict, authors: dict) -> str:

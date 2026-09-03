@@ -2,7 +2,13 @@ import argparse
 import sys
 
 from gitpulse.git_log import GitLogError, get_commits, is_git_repo
-from gitpulse.render import render_bar_chart, render_json, render_markdown, render_table
+from gitpulse.render import (
+    render_bar_chart,
+    render_csv,
+    render_json,
+    render_markdown,
+    render_table,
+)
 from gitpulse.stats import activity_by_weekday, author_summary, overview, top_files
 
 
@@ -14,7 +20,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--author", default=None, help="Filter commits by author.")
     parser.add_argument(
         "--format",
-        choices=["table", "json", "markdown"],
+        choices=["table", "json", "markdown", "csv"],
         default="table",
         help="Output format.",
     )
@@ -40,6 +46,8 @@ def run(args: argparse.Namespace) -> str:
         output = render_json(stats_overview, authors)
     elif args.format == "markdown":
         output = render_markdown(stats_overview, authors)
+    elif args.format == "csv":
+        output = render_csv(stats_overview, authors)
     else:
         output = render_table(stats_overview, authors)
         if not args.no_activity:

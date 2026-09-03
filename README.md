@@ -20,7 +20,7 @@ gitpulse                          # analyze the current directory
 gitpulse /path/to/repo            # analyze a specific repo
 gitpulse --since "2024-01-01"     # only commits after a date
 gitpulse --author "Jane Doe"      # filter by author
-gitpulse --format json            # json / table / markdown
+gitpulse --format json            # json / table / markdown / csv
 gitpulse --top-files 10           # show more hot files
 gitpulse -o report.md --format markdown   # write a markdown report to a file
 ```
@@ -66,7 +66,7 @@ ruff check .
 
 ## Roadmap
 
-- [ ] CSV export (`--format csv`) for spreadsheet-friendly reports
+- [x] CSV export (`--format csv`) for spreadsheet-friendly reports
 - [ ] Per-file contributor breakdown
 - [ ] Configurable date bucketing for the activity chart (daily/weekly/monthly)
 
